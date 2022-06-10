@@ -50,8 +50,6 @@ function room() {
   camera.add(listener);
   var sound = new THREE.Audio(listener);
 
-  // Music by The War On Drugs - Thinking Of A Place
-  var stream = "/sounds/376737_Skullbeatz___Bad_Cat_Maste.mp3";
   //Music by "http://opengameart.org/content/project-utopia-seamless-loop"
   var stream2 = "/sounds/Project_Utopia.mp3";
 
@@ -59,7 +57,7 @@ function room() {
     sound.setBuffer(buffer);
     sound.setLoop(true);
     sound.setVolume(0.4);
-    //sound.play();
+    sound.play();
   });
 
   // LIGHTS
@@ -82,7 +80,7 @@ function room() {
   const textureMaterial = new THREE.MeshBasicMaterial({
     map: textureLoader.load("/textures/excape.jpg"),
     side: THREE.DoubleSide,
-  }); //{ color: "gray",side: THREE.DoubleSide, transparent: false }
+  }); 
 
   // walls
   const wall = new THREE.Mesh(
@@ -284,8 +282,6 @@ function room() {
 
   // message to the player
 
- 
-
   THREE.DefaultLoadingManager.onProgress = function (
     itemPath,
     itemIndex,
@@ -361,8 +357,6 @@ function room() {
 
     // if the limit of incorrect numbers has been reached, the player dies
     if (incorrect_answers == 2) {
-      // scene.remove(model);
-      // scene.remove(group);
       modal.style.display = "block";
       document.getElementById("modalText").style.display = "block";
       document.getElementById("modalText").innerHTML = "You lose!!";
@@ -641,7 +635,7 @@ function room() {
 
   function get_Puzzels() {
     let puzzels = [
-      ["No", "What is one the capital\n city of South Africa is Japan"],
+      ["No", "What is one the capital\n city of \nSouth Africa is Japan"],
       ["No", "Is 0/0 equal to zero"],
       [
         "Yes",
@@ -654,8 +648,8 @@ function room() {
       ["Yes", "Has Backgammon been played for 5,000 years?"],
       ["Yes", "Have you ever worn \nunderwear two days in a row?"],
       ["Yes", "Have you ever lied to your parents?"],
-      ["No", "Afica is made up of 100 countries"],
-      ["No", "Is it possible to sneeze with your eyes open?"],
+      ["No", "Afica is made up of 100 \ncountries"],
+      ["No", "Is it possible to sneeze \nwith your eyes open?"],
     ];
 
     let puzzel_Random_Index = Math.floor(Math.random() * puzzels.length);
