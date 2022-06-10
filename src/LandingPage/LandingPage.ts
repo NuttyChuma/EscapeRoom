@@ -4,11 +4,12 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import Room2 from "../Room2/Room2";
 import Room1 from "../Room1/Nathi2";
 import Room3 from "../Room3/Nathi";
+import room from "../Room4/Room";
 
 const LandingPage = () => {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x4a4b4d);
-  const gui = new GUI();
+  // const gui = new GUI();
 
   document.getElementById("loading").style.display = "flex";
   document.getElementById("nathi").style.display = "none";
@@ -127,21 +128,7 @@ const LandingPage = () => {
       scene.add(text);
       text.position.set(-820,40,-1000);
       text.scale.set(20,20,1)
-      // text.scale.set(0.2, 0.2, 0.2);
-      // text.position.z = -1500;
-      // text.position.y = a - 80;
-      // text.position.x = -400;
-
-    //   const positio = gui.addFolder("Pooosition");
-    // positio.add(text.position, "x", -1000, 500);
-    // positio.add(text.position, "y", -1000, 500);
-    // positio.add(text.position, "z", -1000, 500);
-
-    // const scale = gui.addFolder("scale");
-    // scale.add(text.scale, "x", 1, 20);
-    // scale.add(text.scale, "y", 1, 20);
-    // scale.add(text.scale, "z", 1, 10);
-
+      
       counter++;
       break;
     }
@@ -187,6 +174,7 @@ const LandingPage = () => {
           // Room3();
           // Room2();
           Room1();
+          // room();
         }
       }
     });

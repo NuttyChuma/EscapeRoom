@@ -2,9 +2,13 @@ import { KeyDisplay } from "../utils";
 import { CharacterControls } from "../characterControls";
 import * as THREE from "three";
 import LandingPage from "../LandingPage/LandingPage";
+// import 'threex.domevents/threex.domevents'
+
+// import { CameraHelper, FontLoader, TextGeometry, BoxBufferGeometry, MeshPhongMaterial } from 'three';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import Room2 from "../Room2/Room2";
+// import Lindo from './Lindo';
 
 export function Nathi2() {
   // SCENE
@@ -43,8 +47,8 @@ export function Nathi2() {
     () => {
       // modal.style.display = "none";
       // renderer.setAnimationLoop(animate);
-      document.body.removeChild(renderer.domElement);
       modal.style.display = "none";
+      document.body.removeChild(renderer.domElement);
       Nathi2();
     },
     false
@@ -507,7 +511,7 @@ export function Nathi2() {
     loader.load("helvetiker_bold.typeface.json", function (font: any) {
       Font = font;
       const geometry = new THREE.TextGeometry(
-        "F I N D  T H E  I N F I N T Y  S T O N E S\n\nP O S S E S S I N G  A L L  S T O N E S   W I E L D S  I N F I N I T E  P O W E R.\nW I T H I N  T H I S  S P A C E  Y O U ' L L  F I N D  T H E M  A L L  I N  T I M E .\nA L T E R  Y O U R  M I N D , B E N D  Y O U R  R E A L I T Y .\nL O O K  D E E P  I N T O  Y O U R  S O U L .\nT H E R E ' S  N O  T I M E  L I K E  P R E S E N T .\nB U T  F I R S T ,  Y O U R  M I N D  M U S T  B E  I N  O R D E R\n\nN . B .: D O U B L E  C L I C K  T H E  O B J E C T  Y O U  T H I N K  T H E  S T O N E S  M I G H T  B E  H I D D E N  I N\nC H O O S I N G  A  W R O N G  O B J E C T  W I L L  C A U S E  T I M E  T O  M O V E  F A S T E R",
+        "F I N D  T H E  I N F I N T Y  S T O N E S\n\nP O S S E S S I N G  A L L  S T O N E S   W I E L D S  I N F I N I T E  P O W E R.\nW I T H I N  T H I S  S P A C E  Y O U ' L L  F I N D  T H E M  A L L  I N  T I M E .\nA L T E R  Y O U R  M I N D , B E N D  Y O U R  R E A L I T Y .\nL O O K  D E E P  I N T O  Y O U R  S O U L .\n\nN . B .: D O U B L E  C L I C K  T H E  O B J E C T  Y O U  T H I N K  T H E  S T O N E S  M I G H T  B E  H I D D E N  I N\nC H O O S I N G  A  W R O N G  O B J E C T  W I L L  C A U S E  T I M E  T O  M O V E  F A S T E R",
         {
           font: Font,
           size: 80,
@@ -535,9 +539,10 @@ export function Nathi2() {
     popUpMessage.rotation.y = (180 * Math.PI) / 180;
     // popUpMessage.children[1].geometry
     board.position.y -= 40;
-    board.position.x += 50;
+    board.position.x += 70;
+    // board.scale.x = 1.2
     popUpMessage.position.z += 450;
-    board.scale.set(1.2, 1.6, 1);
+    board.scale.set(1.3, 1.6, 1);
     scene.add(popUpMessage);
     document.getElementById("timerText").innerHTML = "90";
     timer = 90;
@@ -850,17 +855,16 @@ export function Nathi2() {
     scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 
     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    var mult = 150
-    dirLight.position.set(-60*mult, 100*mult, -10*mult);
+    dirLight.position.set(-60, 100, -10);
     dirLight.castShadow = true;
-    dirLight.shadow.camera.top = 50*mult;
-    dirLight.shadow.camera.bottom = -50*mult;
-    dirLight.shadow.camera.left = -50*mult;
-    dirLight.shadow.camera.right = 50*mult;
+    dirLight.shadow.camera.top = 50;
+    dirLight.shadow.camera.bottom = -50;
+    dirLight.shadow.camera.left = -50;
+    dirLight.shadow.camera.right = 50;
     dirLight.shadow.camera.near = 0.1;
-    dirLight.shadow.camera.far = 20000*mult;
-    dirLight.shadow.mapSize.width = 4096*mult;
-    dirLight.shadow.mapSize.height = 4096*mult;
+    dirLight.shadow.camera.far = 200;
+    dirLight.shadow.mapSize.width = 4096;
+    dirLight.shadow.mapSize.height = 4096;
     scene.add(dirLight);
   }
 }
