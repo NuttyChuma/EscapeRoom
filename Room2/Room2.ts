@@ -8,7 +8,7 @@ import LandingPage from "../LandingPage/LandingPage";
 import Room3 from "../Room3/Nathi";
 
 const Room2 = () => {
-  const gui = new GUI();
+  // const gui = new GUI();
 
   //Game logic variables
   let WORD: any[] = [
@@ -110,6 +110,8 @@ const Room2 = () => {
   document.getElementById("modalText").style.display = "none";
   document.getElementById("continueBtn").style.display = "block";
   document.getElementById("restartBtn").style.display = "block";
+  document.getElementById("timerDiv").style.display = "none";
+  document.getElementById("timerText").style.display = "none";
 
   //Create a scenne
   const scene = new THREE.Scene();
@@ -143,27 +145,24 @@ const Room2 = () => {
   orbitControls.update();
 
   // LIGHTS
-  light(); 
+  light();
 
   // Load the models
 
   // A group on all the models that make up the room that the charecter must not move throght
-  var roomComponents:THREE.Group = new THREE.Group(); 
+  var roomComponents: THREE.Group = new THREE.Group();
 
   var myRoom: THREE.Group = new THREE.Group(); //current room
 
-  new GLTFLoader().load(
-    "Room2/room/scene.gltf",
-    function (gltf) {
-      myRoom = gltf.scene;
-      roomComponents.add(myRoom);
-      let scale = 100;
-      myRoom.scale.set(scale, scale, scale);
+  new GLTFLoader().load("Room2/room/scene.gltf", function (gltf) {
+    myRoom = gltf.scene;
+    roomComponents.add(myRoom);
+    let scale = 100;
+    myRoom.scale.set(scale, scale, scale);
 
-      myRoom.castShadow = true;
-      myRoom.receiveShadow = true;
-    }
-  );
+    myRoom.castShadow = true;
+    myRoom.receiveShadow = true;
+  });
 
   var tv: THREE.Group; //TV model
 
@@ -178,12 +177,10 @@ const Room2 = () => {
     tv.scale.set(8.5, 6, 2);
     tv.position.set(0, 170, -580);
 
-    
-
     let info = ["W e l c o m e  t o  r o o m 2"]; //Text to be displayed on the TV screen
-    
 
-    loader.load("helvetiker_bold.typeface.json", (font) => { //Load font
+    loader.load("helvetiker_bold.typeface.json", (font) => {
+      //Load font
       FONT = font;
 
       //First text on the screen
@@ -191,7 +188,7 @@ const Room2 = () => {
         font: font,
         size: 3,
         height: 5,
-      }); 
+      });
 
       const textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
       textMesh = new THREE.Mesh(textGeometry, textMaterial);
@@ -208,7 +205,6 @@ const Room2 = () => {
       const movesMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
       movesMesh = new THREE.Mesh(movesGeometry, movesMaterial);
       movesMesh.position.set(0, 8, 0);
-
     });
   });
 
@@ -217,15 +213,14 @@ const Room2 = () => {
   let TileBoxes: THREE.Box3[] = []; //Invinsible boxes array to get the position of the character
 
   loader.load("helvetiker_bold.typeface.json", (font) => {
-    let colorCount = 0; 
+    let colorCount = 0;
     let counter = 0; //Tile index
     for (let i = -200; i < 400; i += 200) {
       for (let j = -500; j <= 500; j += 200) {
-
         //Create a tile
         const tileGeometry = new THREE.BoxGeometry(200, 15, 200);
         const tileMaterial = new THREE.MeshPhongMaterial({
-          color: colorCount % 2 === 0 ? 0x000000 : 0xffffff, 
+          color: colorCount % 2 === 0 ? 0x000000 : 0xffffff,
           transparent: true,
           opacity: 1,
         });
@@ -248,9 +243,9 @@ const Room2 = () => {
         scene.add(letter);
         letter.position.set(i, 5, j);
         letter.scale.set(6.6, -7, 6.6);
-        letter.rotateX(Math.PI / 2); 
+        letter.rotateX(Math.PI / 2);
 
-        //Invinsible Box 
+        //Invinsible Box
         const invinsibleBox = new THREE.Mesh(
           new THREE.BoxGeometry(200, 800, 200),
           new THREE.MeshBasicMaterial({
@@ -260,7 +255,6 @@ const Room2 = () => {
           })
         );
         invinsibleBox.position.set(i, 0, j);
-        
 
         const boundingBox = new THREE.Box3();
         boundingBox.setFromObject(invinsibleBox);
@@ -279,14 +273,14 @@ const Room2 = () => {
     itemIndex,
     totalItems
   ) {
-    if (itemIndex === totalItems) { //If all the models are loaded, hide the loading screen
+    if (itemIndex === totalItems) {
+      //If all the models are loaded, hide the loading screen
       document.getElementById("loading").style.display = "none"; //Hide loading screen
     }
   };
 
   // In three seconds, remove the welcome message on the screen and start the game
   setTimeout(() => {
-    
     textMesh.geometry = new THREE.TextGeometry(WORD.toString(), {
       font: FONT,
       size: 3,
@@ -294,7 +288,10 @@ const Room2 = () => {
     });
     textMesh.position.x = -24;
     tv.add(movesMesh);
+    document.getElementById("infoAlert").style.display = "flex";
   }, 3000);
+
+  setTimeout(() => {document.getElementById("infoAlert").style.display = "none";},8000)
 
   // MODEL WITH ANIMATIONS
   var model: THREE.Group;
@@ -320,7 +317,7 @@ const Room2 = () => {
     const mixer = new THREE.AnimationMixer(model);
     const animationsMap: Map<string, THREE.AnimationAction> = new Map();
     gltfAnimations
-      .filter((a) => a.name != "T_Pose")//Remove the Tpose from the animations
+      .filter((a) => a.name != "T_Pose") //Remove the Tpose from the animations
       .forEach((a: THREE.AnimationClip) => {
         animationsMap.set(a.name, mixer.clipAction(a));
       });
@@ -335,7 +332,6 @@ const Room2 = () => {
     );
   });
 
-
   let mouse = new THREE.Vector2();
 
   function onMouseMove(event: any) {
@@ -346,10 +342,8 @@ const Room2 = () => {
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
   window.addEventListener("pointermove", onMouseMove);
-  
 
-  scene.add(roomComponents);// Add room components to the scene
-
+  scene.add(roomComponents); // Add room components to the scene
 
   //EVENT LISTENERS
 
@@ -378,102 +372,113 @@ const Room2 = () => {
     false
   );
 
+  let FOUNDINDEX: any[] = [];
+
   //Space key event listener for openning the tiles
   document.addEventListener("keyup", (event) => {
     if (event.key === "space" || event.key === " ") {
-      const curr = scene.getObjectByName("cylinder" + TILEINDEX.toString());//Get the current tile by name from the scene
-      
+      const curr = scene.getObjectByName("cylinder" + TILEINDEX.toString()); //Get the current tile by name from the scene
 
-      if (openTiles.length === 0) { //If no tile is open
+      if (openTiles.length === 0) {
+        //If no tile is open
         LETTERS.map((letter, index) => {
-          if (letter.index === TILEINDEX) { //Get the letter under the current tile by index
+          if (letter.index === TILEINDEX) {
+            //Get the letter under the current tile by index
             openTiles.push(letter); //add it to the open tiles array
             curr.visible = false; //Open tile
           }
         });
       } else {
         //If we have a tile open
-        
-        let openTile = openTiles[0]; 
-        let currTile = LETTERS[TILEINDEX];
-        curr.visible = false; //one current tile
-        MOVESCOUNT -= 1;
 
-        if (MOVESCOUNT === 0 && CORRECTCOUNT!==9) { //Check if the player still has moves
-          //if no moves left
-          textMesh.geometry = new THREE.TextGeometry("GAME OVER", {
-            font: FONT,
-            size: 4,
-            height: 5,
-          });//Display GAME over on the screen
-          movesMesh.visible = false; //Hide moves
+        if (openTiles[0].index !== TILEINDEX && FOUNDINDEX.indexOf(TILEINDEX) === -1) {
 
-          setTimeout(() => {
-            //Two seconds after the player loses,
-            // show the modal and give the player an option to either 
-            // Go to the home page to restart the current level
-            renderer.setAnimationLoop(null); //Pause the game
-            modal.style.display = "block";
-            document.getElementById("modalText").style.display = "block";
-            document.getElementById("modalText").innerHTML = "Game Over!";
-            document.getElementById("continueBtn").style.display = "none";
-            document.getElementById("homeBtn").style.display = "block";
-          }, 2000);
-        } else {
-          // if we have moves left
-          movesMesh.geometry = new THREE.TextGeometry(MOVESCOUNT.toString(), {
-            font: FONT,
-            size: 4,
-            height: 5,
-          });
+          let openTile = openTiles[0];
+          let currTile = LETTERS[TILEINDEX];
+          curr.visible = false; //one current tile
+          MOVESCOUNT -= 1;
 
-          if (openTile.letter !== currTile.letter) {
-            // Incorrct tile openned
+          if (MOVESCOUNT === 0 && CORRECTCOUNT !== 9) {
+            //Check if the player still has moves
+            //if no moves left
+            textMesh.geometry = new THREE.TextGeometry("GAME OVER", {
+              font: FONT,
+              size: 4,
+              height: 5,
+            }); //Display GAME over on the screen
+            movesMesh.visible = false; //Hide moves
 
             setTimeout(() => {
-              curr.visible = true;
-              scene.getObjectByName(
-                "cylinder" + openTile.index.toString()
-              ).visible = true;
-            }, 1500);
+              //Two seconds after the player loses,
+              // show the modal and give the player an option to either
+              // Go to the home page to restart the current level
+              renderer.setAnimationLoop(null); //Pause the game
+              modal.style.display = "block";
+              document.getElementById("modalText").style.display = "block";
+              document.getElementById("modalText").innerHTML = "Game Over!";
+              document.getElementById("continueBtn").style.display = "none";
+              document.getElementById("homeBtn").style.display = "block";
+            }, 2000);
           } else {
-            //Correct tile openned
-            
-            CORRECTCOUNT++;
-            WORD[FINALWORD.indexOf(openTile.letter)] = currTile.letter;
-            textMesh.geometry = new THREE.TextGeometry(`${WORD.toString()}`, {
+            // if we have moves left
+            movesMesh.geometry = new THREE.TextGeometry(MOVESCOUNT.toString(), {
               font: FONT,
-              size: 3,
+              size: 4,
               height: 5,
             });
 
-            if (CORRECTCOUNT === 9) { //Got all the letters
+            if (openTile.letter !== currTile.letter) {
+              // Incorrct tile openned
+
               setTimeout(() => {
-                movesMesh.visible = false;
-                textMesh.geometry = new THREE.TextGeometry(
-                  `CONGRATULATIONS!!!! \n SEE YOU ON THE OTHER SIDE`,
-                  { font: FONT, size: 3, height: 5 }
-                );
-              }, 1000);
+                curr.visible = true;
+                scene.getObjectByName(
+                  "cylinder" + openTile.index.toString()
+                ).visible = true;
+              }, 1500);
+            } else {
+              //Correct tile openned
 
-              setTimeout(() => { //in four seconds, got to the next room
-                // renderer.setAnimationLoop(null);
-                // modal.style.display = "block";
-                // document.getElementById("modalText").style.display = "block";
-                // document.getElementById("modalText").innerHTML = "CONGRATULATIONS!!!!";
-                // document.getElementById("continueBtn").style.display = "none";
-                // document.getElementById("restartBtn").style.display = "none";
-                // document.getElementById("homeBtn").style.display = "block";
+              CORRECTCOUNT++;
+              FOUNDINDEX.push(TILEINDEX);
+              FOUNDINDEX.push(openTile.index);
+              WORD[FINALWORD.indexOf(openTile.letter)] = currTile.letter;
+              textMesh.geometry = new THREE.TextGeometry(`${WORD.toString()}`, {
+                font: FONT,
+                size: 3,
+                height: 5,
+              });
 
-                document.removeChild(renderer.domElement);
-                Room3();
-              }, 4000);
+              if (CORRECTCOUNT === 9) {
+                //Got all the letters
+                setTimeout(() => {
+                  movesMesh.visible = false;
+                  textMesh.geometry = new THREE.TextGeometry(
+                    `CONGRATULATIONS!!!! \nSEE YOU ON THE OTHER SIDE`,
+                    { font: FONT, size: 3, height: 5 }
+                  );
+                }, 1000);
+
+                setTimeout(() => {
+                  //in four seconds, got to the next room
+                  // renderer.setAnimationLoop(null);
+                  // modal.style.display = "block";
+                  // document.getElementById("modalText").style.display = "block";
+                  // document.getElementById("modalText").innerHTML = "CONGRATULATIONS!!!!";
+                  // document.getElementById("continueBtn").style.display = "none";
+                  // document.getElementById("restartBtn").style.display = "none";
+                  // document.getElementById("homeBtn").style.display = "block";
+
+                  document.body.removeChild(renderer.domElement);
+                  Room3();
+                }, 4000);
+              }
             }
           }
-        }
 
-        openTiles = [];
-        // console.log(openTiles)
+          openTiles = [];
+          // console.log(openTiles)
+        }
       }
       // console.log(openTiles);
     }
@@ -531,9 +536,6 @@ const Room2 = () => {
   function animate() {
     let count = 0;
 
-    
-
-
     var direction: THREE.Vector3;
     if (characterControls) {
       direction = characterControls.walkDirection;
@@ -558,13 +560,11 @@ const Room2 = () => {
       TileBoxes.map((boundingBox, index) => {
         if (boundingBox.containsBox(modelBoundingBox) && !callOnce) {
           TILEINDEX = index; //index of the tile the character is currently in.
-          
+
           callOnce = true;
-          
         }
         if (!boundingBox.containsBox(modelBoundingBox) && callOnce) {
           callOnce = false;
-          
         }
       });
     }
@@ -600,13 +600,10 @@ const Room2 = () => {
       if (downIntersects.length !== 0) {
         let newYPosition = downIntersects[0][0].distance;
         if (newYPosition > 27) {
-          
           start = 0;
-          
         }
       }
 
-     
       let preIntersect = 0;
       while (origin.y !== 260 + start) {
         const raycaster = new THREE.Raycaster(origin, direction, 0, 70);
@@ -630,8 +627,6 @@ const Room2 = () => {
         if (thisRayIntersects.length !== 0) {
           intersects.push(thisRayIntersects);
         }
-
-       
 
         if (
           thisRayIntersects.length === 0 &&
@@ -667,7 +662,7 @@ const Room2 = () => {
       characterControls.update(timeStep, keysPressed);
     }
     orbitControls.update();
-    
+
     renderer.render(scene, camera);
   }
 
@@ -689,18 +684,18 @@ const Room2 = () => {
     scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 
     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    var mult = 150
-    dirLight.position.set(-60*mult, 100*mult, -10*mult);
+    dirLight.position.set(-60, 100, -10);
     dirLight.castShadow = true;
-    dirLight.shadow.camera.top = 50*mult;
-    dirLight.shadow.camera.bottom = -50*mult;
-    dirLight.shadow.camera.left = -50*mult;
-    dirLight.shadow.camera.right = 50*mult;
+    dirLight.shadow.camera.top = 50;
+    dirLight.shadow.camera.bottom = -50;
+    dirLight.shadow.camera.left = -50;
+    dirLight.shadow.camera.right = 50;
     dirLight.shadow.camera.near = 0.1;
-    dirLight.shadow.camera.far = 20000*mult;
-    dirLight.shadow.mapSize.width = 4096*mult;
-    dirLight.shadow.mapSize.height = 4096*mult;
+    dirLight.shadow.camera.far = 200;
+    dirLight.shadow.mapSize.width = 4096;
+    dirLight.shadow.mapSize.height = 4096;
     scene.add(dirLight);
+    // scene.add( new THREE.CameraHelper(dirLight.shadow.camera))
   }
 };
 

@@ -5,6 +5,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import LandingPage from "../LandingPage/LandingPage";
 import SecondGame from "./SecondGame";
+import Room4 from '../Room4/Room';
 
 
 function Nathi() {
@@ -59,7 +60,9 @@ function Nathi() {
       })
       SELECTED = [];
       modal.style.display = "none";
-      Retry();
+      // Retry();
+      document.body.removeChild(renderer.domElement);
+      Nathi();
       
     },
     false
@@ -68,8 +71,9 @@ function Nathi() {
   document.getElementById("homeBtn").addEventListener(
     "click",
     () => {
-      document.body.removeChild(renderer.domElement);
       modal.style.display = "none";
+      document.body.removeChild(renderer.domElement);
+      
       LandingPage();
     },
     false
@@ -152,21 +156,7 @@ function Nathi() {
         tmpMxr.clipAction(clip).play();
       }
     });
-    // new GLTFLoader().load('Characters/Soldier/Soldier.glb', function (soldier) {
-    //     console.log(soldier)
-    //     gltf.animations = soldier.animations
-    //     console.log(gltf)
-
-    //     // const gltfAnimations: THREE.AnimationClip[] = gltf.animations;
-    //     // const mixer = new THREE.AnimationMixer(model);
-    //     // const animationsMap: Map<string, THREE.AnimationAction> = new Map()
-    //     // gltfAnimations.filter(a => a.name != 'TPose').forEach((a: THREE.AnimationClip) => {
-    //     //     animationsMap.set(a.name, mixer.clipAction(a))
-    //     // })
-    //     // console.log(characterControls)
-    //     // characterControls = new CharacterControls(model, mixer, animationsMap, orbitControls, camera, 'Idle')
-    // })
-    // console.log(gltf)
+  
     const gltfAnimations: THREE.AnimationClip[] = gltf.animations;
     const mixer = new THREE.AnimationMixer(model);
     const animationsMap: Map<string, THREE.AnimationAction> = new Map();
@@ -260,6 +250,8 @@ function Nathi() {
   firstGame();
   SecondGame(scene, camera, renderer);
 
+  
+
   var popUpMessage: any, Font: any, board: any;
   function askFirstRiddle() {
     popUpMessage = new THREE.Group();
@@ -298,7 +290,7 @@ function Nathi() {
       text.scale.set(0.1, 0.1, 0.1);
       text.position.y = 310;
       text.position.z = 10;
-      text.position.x = -210;
+      text.position.x = -230;
       // console.log(text)
     });
 
@@ -421,7 +413,7 @@ function Nathi() {
   function winner() {
     console.log("Winner");
     popUpMessage.children[1].geometry = new THREE.TextGeometry(
-      "CONGRATULATIONS!!!!! \n You Survived This Round",
+      "S M A R T   C H O I C E",
       {
         font: Font,
         size: 80,
@@ -448,6 +440,9 @@ function Nathi() {
 
     // Lindo()
     // startSecondGame()
+    document.getElementById("question").style.display = "block"
+    document.getElementById("question").innerHTML =
+          "Give an anagram of the word SILENT before the time runs out";
     ShowSecondGame(true);
   }
 
@@ -550,6 +545,14 @@ function Nathi() {
         clue();
         callOnce = true;
       }
+      // if (boundingBox.containsBox(modelBoundingBox) && !callOnce) {
+      //   document.getElementById("question").innerHTML =
+      //     "Give an anagram of the word SILENT before the time runs out";
+      //   callOnce = true;
+      // }
+      // if (!boundingBox.containsBox(modelBoundingBox) && callOnce) {
+      //   callOnce = false;
+      // }
     }
 
     // Checking for obstacles in front of the character
@@ -782,11 +785,22 @@ function Nathi() {
           if(CORRECTCOUNT===6){
             // win = true;
             pause=true;
-            modal.style.display = "block";
-            document.getElementById('continueBtn').style.display = 'none';
-            renderer.setAnimationLoop(null);
-            document.getElementById('modalText').style.display = 'block';
-            document.getElementById('modalText').innerHTML = "CONGRATULATIONS!!!!! \n You Survived This Round";
+            // modal.style.display = "block";
+            // document.getElementById('continueBtn').style.display = 'none';
+            // renderer.setAnimationLoop(null);
+            // document.getElementById('modalText').style.display = 'block';
+            // document.getElementById('modalText').innerHTML = "CONGRATULATIONS!!!!! \n You Survived This Round";
+
+            
+            document.getElementById("question").style.display = "flex";
+            document.getElementById("question").style.display = "none";
+            document.getElementById("infoAlert").innerHTML = "CONGRATULATIONS!!!!! \n You Survived This Round."
+
+            setTimeout(() => {
+              document.getElementById("infoAlert").style.display = "none";
+              document.body.removeChild(renderer.domElement);
+              Room4();
+            },3000)
 
           }
 
@@ -803,18 +817,18 @@ function Nathi() {
     scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 
     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    var mult = 150
-    dirLight.position.set(-60*mult, 100*mult, -10*mult);
+    dirLight.position.set(-60, 100, -10);
     dirLight.castShadow = true;
-    dirLight.shadow.camera.top = 50*mult;
-    dirLight.shadow.camera.bottom = -50*mult;
-    dirLight.shadow.camera.left = -50*mult;
-    dirLight.shadow.camera.right = 50*mult;
+    dirLight.shadow.camera.top = 50;
+    dirLight.shadow.camera.bottom = -50;
+    dirLight.shadow.camera.left = -50;
+    dirLight.shadow.camera.right = 50;
     dirLight.shadow.camera.near = 0.1;
-    dirLight.shadow.camera.far = 20000*mult;
-    dirLight.shadow.mapSize.width = 4096*mult;
-    dirLight.shadow.mapSize.height = 4096*mult;
+    dirLight.shadow.camera.far = 200;
+    dirLight.shadow.mapSize.width = 4096;
+    dirLight.shadow.mapSize.height = 4096;
     scene.add(dirLight);
+    // scene.add( new THREE.CameraHelper(dirLight.shadow.camera))
   }
 }
 export default Nathi;
